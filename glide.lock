@@ -1,0 +1,6 @@
+hash: 7d13846ee6c533d90d689bc564b4f993280f484ccf20a7f4cedd1f5a7cd93bdd
+updated: 2016-07-19T22:26:46.5591727+12:00
+imports:
+- name: github.com/husobee/vestigo
+  version: 9dfd4d2384383143ae77e2dd52fe0cdb71470b98
+testImports: []

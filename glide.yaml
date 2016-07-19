@@ -1,0 +1,4 @@
+package: github.com/bhavikkumar/level-three-rest
+import:
+- package: github.com/husobee/vestigo
+  version: ~1.0.1
