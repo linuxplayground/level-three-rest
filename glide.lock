@@ -1,6 +1,22 @@
-hash: 7d13846ee6c533d90d689bc564b4f993280f484ccf20a7f4cedd1f5a7cd93bdd
-updated: 2016-07-19T22:26:46.5591727+12:00
+hash: 0d00c61c66c9c74c16e11fad9220c7c3072f8381ef9b53e7b31dbd9a04111b1d
+updated: 2016-07-20T21:18:35.1969315+12:00
 imports:
 - name: github.com/husobee/vestigo
   version: 9dfd4d2384383143ae77e2dd52fe0cdb71470b98
-testImports: []
+- name: github.com/stretchr/testify
+  version: f390dcf405f7b83c997eac1b06768bb9f44dec18
+  subpackages:
+  - assert
+  - http
+  - mock
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
+- name: github.com/stretchr/objx
+  version: cbeaeb16a013161a98496fad62933b1d21786672
