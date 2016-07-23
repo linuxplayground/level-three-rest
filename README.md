@@ -1,4 +1,4 @@
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)]()
+[![Build Status](https://travis-ci.org/bhavikkumar/level-three-rest.svg?branch=master)](https://travis-ci.org/bhavikkumar/level-three-rest) [![Coverage Status](https://coveralls.io/repos/github/bhavikkumar/level-three-rest/badge.svg?branch=master)](https://coveralls.io/github/bhavikkumar/level-three-rest?branch=master)
 
 ## This is still under development
 
