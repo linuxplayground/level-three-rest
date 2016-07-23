@@ -5,7 +5,7 @@ env:
 
 language: go
 go:
-- tip
+ - tip
 
 before_script:
   - export TZ=Pacific/Auckland
@@ -15,8 +15,11 @@ branches:
   - master
 
 before_install:
-- go get github.com/mattn/goveralls
-- go get golang.org/x/tools/cover
+ - go get github.com/mattn/goveralls
+ - go get golang.org/x/tools/cover
+ - go get github.com/Masterminds/glide
+
 script:
-- go test -v -covermode=count -coverprofile=coverage.out ./...
-- goveralls -coverprofile=coverage.out -service travis-ci -repotoken $COVERALLS_TOKEN
+ - glide install
+ - go test -v -covermode=count -coverprofile=coverage.out ./...
+ - goveralls -coverprofile=coverage.out -service travis-ci -repotoken $COVERALLS_TOKEN
