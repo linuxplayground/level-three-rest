@@ -1,5 +1,4 @@
 env:
-  - PATH=/home/travis/gopath/bin:$PATH
   global:
     secure: ID+8X4vKsFAhbVsJQ3mdZFqgntocDOEAPEVcZ7wjh+HzX96JZo25dx0XFDu1+QDNVDupn/nrDg+1aAeUh09wdqZg1Po83aH0OqZpFKSt7weY54D3u81HduJUlM2qkGh/RorexsmHW7DYLVfnpu1DsZ/Xs21CvWEDIjQ/uYsYI850++j+vNYsMbEj42Hju92dQJd30LmPXFsF79ex7gOraogQ3/PltYDLKDacQ6VOXIGDBMEMOoBC8MRlZuk+xRfLwvwjyiYCoHsLkGQQlGNI5Zy6n1ZyxX88Pyq0oUVa72CM+5frTq+Gpp/WsSxVJWduTXnmcUjIAvcCn0sMmDwGKRpILOOaAqKZuLJe4Vjqyk7xfMEd904OGJeC8HoRjoL60CGj1rjJxQSuLOKpFN/VZ3wdkyzyur8V3DnmxLMUoEs4AM7n1maJGE71t8B8hXK1/EMA1HYhqJnrAKIvBh5UZtRZgGb6j57yyZDBPN+dP1f2gTRpYXMzZAarC/ZvaJrVrE2e8ZT0yxZ84P9QZEv8WFtQb0L/G7xjxkb9SwxEvBjTTetXoNjmZ/emZpErCcR0emqHZUJWF8RB9aUbXgJNYXFkkCYRJmOn+/GxRFoSLGlhq+MzmKMrw6FTk+6vtNUdguV9MRItfvixP43BmRfxODteuee9i1j95BwXO2Ur4ew=
 
@@ -9,6 +8,7 @@ go:
 
 before_script:
   - export TZ=Pacific/Auckland
+  - export "PATH=/home/travis/gopath/bin:$PATH"
 
 branches:
   only:
