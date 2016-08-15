@@ -5,7 +5,6 @@ import (
   "github.com/husobee/vestigo"
   "encoding/json"
   "io/ioutil"
-  "crypto/tls"
 )
 
 type User struct {
@@ -15,19 +14,7 @@ type User struct {
 var users []User
 
 func main() {
-  cfg := &tls.Config{
-    MinVersion: tls.VersionTLS12,
-    CurvePreferences: []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
-  }
-
-  srv := &http.Server {
-		Addr:         ":443",
-		Handler:      CreateRouter(),
-		TLSConfig:    cfg,
-	}
-
-  // TODO - Load these dynamically on start up.
-  srv.ListenAndServeTLS("server.pem", "server.key")
+  http.ListenAndServe(":8080", CreateRouter())
 }
 
 func CreateRouter() *vestigo.Router {
@@ -41,8 +28,6 @@ func CreateRouter() *vestigo.Router {
 func GetNameHandler(w http.ResponseWriter, r *http.Request)  {
   name := vestigo.Param(r, "name")
 
-  // TODO - Clean all this up
-  AddDefaultHeaders(w)
   if UserExists(name) {
     w.WriteHeader(200)
     w.Write([]byte(name))
@@ -60,8 +45,7 @@ func PostNameHandler(w http.ResponseWriter, r *http.Request)  {
       return
   }
 
-  // TODO - Clean all this up
-  AddDefaultHeaders(w)
+  w.Header().Add("Content-Type", "application/json; charset=UTF-8")
   w.Header().Add("Location","/" + user.Name)
   if !UserExists(user.Name) {
     AppendUser(user)
@@ -83,10 +67,4 @@ func UserExists(name string) bool {
     }
   }
   return false
-}
-
-// TODO - Put this in to a chain.
-func AddDefaultHeaders(w http.ResponseWriter) {
-  w.Header().Add("Content-Type", "application/json; charset=UTF-8")
-  w.Header().Add("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 }

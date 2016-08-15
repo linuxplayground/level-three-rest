@@ -22,18 +22,19 @@ We are using the [vestigo](https://github.com/husobee/vestigo) router, it is not
  - [x] OPTIONS
  - [x] Location header on HTTP 201 response
   - Possible using http.ResponseWriter.Header().Add(...)
- - [x] HTTP/2
- - [x] TLS
- - [x] HSTS
+
 
 ### TODO
+ - [ ] HTTP/2
+ - [ ] TLS
+ - [ ] HSTS
+ - [ ] Support multiple Content-Type
+ - [ ] Vendor Content-Type
  - [ ] HATEOAS Links
  - [ ] Rate Limiting
  - [ ] Caching
  - [ ] Versioning
- - [ ] Allow client to limit fields in response
- - [ ] Search Pagination
+ - [ ] Allow client to limiting fields in response
+ - [ ] Pagination with search
  - [ ] Authentication/Authorisation
- - [ ] Support multiple Content-Type
- - [ ] Vendor Content-Type
  - Code clean up
