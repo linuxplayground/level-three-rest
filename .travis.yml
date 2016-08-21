@@ -41,6 +41,7 @@ script:
 after_success:
 - pip install --user awscli
 - export PATH=$PATH:/$HOME/.local/bin
+- `aws ecr create-repository --repository-name $REPO`
 - eval $(aws ecr get-login --region us-west-2)
 - docker tag $REPO:$TAG $AWS_ACCOUNT_NUMBER.dkr.ecr.us-west-2.amazonaws.com/$REPO:$TAG
 - docker push $AWS_ACCOUNT_NUMBER.dkr.ecr.us-west-2.amazonaws.com/$REPO:$TAG
