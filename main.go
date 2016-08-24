@@ -3,37 +3,55 @@ package main
 import (
   "net/http"
   "github.com/husobee/vestigo"
+  "github.com/justinas/alice"
   "encoding/json"
   "io/ioutil"
+  "time"
+  "log"
 )
 
 type User struct {
-  Name string `json:"name"`
+  Id                string    `json:"id"`
+  Name              string    `json:"name"`
+  CreationTime      time.Time `json:"creationTime"`
+  ModificationTime  time.Time `json:"modificationTime"`
 }
 
 var users []User
 
 func main() {
-  http.ListenAndServe(":8080", CreateRouter())
+  chain := alice.New(loggingHandler, recoverHandler).Then(CreateRouter())
+  http.ListenAndServe(":8080", chain)
+}
+
+func loggingHandler(next http.Handler) http.Handler {
+  fn := func(w http.ResponseWriter, r *http.Request) {
+    start := time.Now()
+    log.Printf("Started %s %s", r.Method, r.URL.Path)
+    next.ServeHTTP(w, r)
+    log.Printf("[%s] %q %v\n", r.Method, r.URL.String(), time.Since(start))
+  }
+  return http.HandlerFunc(fn);
+}
+
+func recoverHandler(next http.Handler) http.Handler {
+  fn := func(w http.ResponseWriter, r *http.Request) {
+    defer func() {
+      if err := recover(); err != nil {
+        log.Printf("panic: %+v", err)
+        http.Error(w, http.StatusText(500), 500)
+      }
+    }()
+    next.ServeHTTP(w, r)
+  }
+  return http.HandlerFunc(fn)
 }
 
 func CreateRouter() *vestigo.Router {
   router := vestigo.NewRouter()
 
-  router.Get("/:name", GetNameHandler)
   router.Post("/", PostNameHandler)
   return router
-}
-
-func GetNameHandler(w http.ResponseWriter, r *http.Request)  {
-  name := vestigo.Param(r, "name")
-
-  if UserExists(name) {
-    w.WriteHeader(200)
-    w.Write([]byte(name))
-  } else {
-    w.WriteHeader(404)
-  }
 }
 
 func PostNameHandler(w http.ResponseWriter, r *http.Request)  {
