@@ -13,16 +13,25 @@ const(
   TraceHeader = "X-Request-ID"
 )
 
-// Trace handler ensures that the trace header is present on all requests even
+// The unique trace id for each incoming request
+var TraceId string
+
+// Trace handler ensures that the trace id is available even
 // if the client did not present one. In the case the client does not present
-// one, then a UUID will be generated.
+// one, then a UUID will be generated. The TraceId is used by the logger
+// packager.
 func TraceHandler(next http.Handler) http.Handler  {
   fn := func(w http.ResponseWriter, r *http.Request)  {
-    if r.Header.Get(TraceHeader) == "" {
-      u, _ := uuid.NewV4()
-      r.Header.Set(TraceHeader, u.String())
+    TraceId = r.Header.Get(TraceHeader)
+    if TraceId == "" {
+      u, err := uuid.NewV4()
+      if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        return
+      }
+      TraceId = u.String()
     }
-    w.Header().Set(TraceHeader,r.Header.Get(TraceHeader))
+    w.Header().Set(TraceHeader, TraceId)
     next.ServeHTTP(w, r)
   }
   return http.HandlerFunc(fn)
@@ -32,6 +41,7 @@ func TraceHandler(next http.Handler) http.Handler  {
 func RequestTimerHandler(next http.Handler) http.Handler {
   fn := func (w http.ResponseWriter, r *http.Request)  {
     time.Now()
+    next.ServeHTTP(w,r)
   }
   return http.HandlerFunc(fn)
 }
