@@ -1,10 +1,12 @@
 hash: 0d00c61c66c9c74c16e11fad9220c7c3072f8381ef9b53e7b31dbd9a04111b1d
-updated: 2016-08-24T21:31:33.239291+12:00
+updated: 2016-08-25T23:10:31.1765796+12:00
 imports:
 - name: github.com/husobee/vestigo
   version: 9dfd4d2384383143ae77e2dd52fe0cdb71470b98
 - name: github.com/justinas/alice
   version: 43e429cd03e6faac34faf94153cfb7a5adb6b928
+- name: github.com/nu7hatch/gouuid
+  version: 179d4d0c4d8d407a32af483c2354df1d2c91e6c3
 - name: github.com/stretchr/testify
   version: f390dcf405f7b83c997eac1b06768bb9f44dec18
   subpackages:
