@@ -12,7 +12,7 @@ const (
 )
 
 func main() {
-  chain := alice.New(common.ResponseWriterHandler, common.TraceHandler, common.RequestTimerHandler).Then(createRouter())
+  chain := alice.New(common.TraceHandler, common.RequestTimerHandler).Then(createRouter())
   http.ListenAndServe(":8080", chain)
 }
 

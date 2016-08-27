@@ -42,18 +42,11 @@ func TraceHandler(next http.Handler) http.Handler  {
 func RequestTimerHandler(next http.Handler) http.Handler {
   fn := func (w http.ResponseWriter, r *http.Request)  {
     time.Now()
+    // Use our ResponseWriter wrapper.
+    w = NewResponseWriter(w)
     next.ServeHTTP(w,r)
     res := w.(ResponseWriter)
     log.Println("Size:", res.Size(),"Status:",res.Status())
-  }
-  return http.HandlerFunc(fn)
-}
-
-// Adds our custom ResponseWriter wrapper for all handlers after this one in the chain.
-func ResponseWriterHandler(next http.Handler) http.Handler {
-  fn := func(w http.ResponseWriter, r *http.Request) {
-    w = NewResponseWriter(w)
-    next.ServeHTTP(w,r)
   }
   return http.HandlerFunc(fn)
 }

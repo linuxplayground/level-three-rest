@@ -8,20 +8,18 @@ import(
   "github.com/nu7hatch/gouuid"
 )
 
-// httptest.NewRecorder isn't compatible with NewRequestWriter
-// Need to figure this out
-// func TestRequestTimerHandler(t *testing.T) {
-//   req, err := http.NewRequest("GET", "/level-three-rest", nil)
-//   if err != nil {
-//       t.Fatal(err)
-//   }
-//
-//   rr := httptest.NewRecorder()
-//   handler := testHandler(rr, req)
-//
-//   RequestTimerHandler(handler).ServeHTTP(rr, req)
-//   assert.Equal(t, rr.Code, http.StatusOK)
-// }
+func TestRequestTimerHandler(t *testing.T) {
+  req, err := http.NewRequest("GET", "/level-three-rest", nil)
+  if err != nil {
+      t.Fatal(err)
+  }
+
+  rr := httptest.NewRecorder()
+  handler := testHandler(rr, req)
+
+  RequestTimerHandler(handler).ServeHTTP(rr, req)
+  assert.Equal(t, rr.Code, http.StatusOK)
+}
 
 func TestTraceIdInHeader(t *testing.T) {
   req, err := http.NewRequest("GET", "/level-three-rest", nil)
@@ -54,19 +52,6 @@ func TestNoTraceIdInHeader(t *testing.T) {
   assert.NotNil(t, u)
   assert.Nil(t, err)
 }
-
-// func TestResponseWriterHandler(t *testing.T) {
-//   req, err := http.NewRequest("GET", "/level-three-rest", nil)
-//   if err != nil {
-//       t.Fatal(err)
-//   }
-//
-//   rr := httptest.NewRecorder()
-//   handler := testHandler(rr, req)
-//
-//   ResponseWriterHandler(handler).ServeHTTP(rr, req)
-//   assert.IsType(t, ResponseWriter, rr)
-// }
 
 func testHandler(w http.ResponseWriter, r *http.Request) http.Handler {
   fn := func (w http.ResponseWriter, r *http.Request)  {
