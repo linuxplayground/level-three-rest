@@ -53,9 +53,42 @@ func TestNoTraceIdInHeader(t *testing.T) {
   assert.Nil(t, err)
 }
 
+func TestRecoveryHandlerNoError(t *testing.T) {
+  req, err := http.NewRequest("GET", "/level-three-rest", nil)
+  if err != nil {
+      t.Fatal(err)
+  }
+
+  rr := httptest.NewRecorder()
+  handler := testHandler(rr, req)
+
+  RecoveryHandler(handler).ServeHTTP(rr, req)
+  assert.Equal(t, rr.Code, http.StatusOK)
+}
+
+func TestRecoveryHandlerError(t *testing.T) {
+  req, err := http.NewRequest("GET", "/level-three-rest", nil)
+  if err != nil {
+      t.Fatal(err)
+  }
+
+  rr := httptest.NewRecorder()
+  handler := testPanicHandler(rr, req)
+
+  RecoveryHandler(handler).ServeHTTP(rr, req)
+  assert.Equal(t, rr.Code, http.StatusInternalServerError)
+}
+
 func testHandler(w http.ResponseWriter, r *http.Request) http.Handler {
   fn := func (w http.ResponseWriter, r *http.Request)  {
     w.WriteHeader(http.StatusOK)
+  }
+  return http.HandlerFunc(fn)
+}
+
+func testPanicHandler(w http.ResponseWriter, r *http.Request) http.Handler {
+  fn := func (w http.ResponseWriter, r *http.Request)  {
+    panic("oh no!")
   }
   return http.HandlerFunc(fn)
 }

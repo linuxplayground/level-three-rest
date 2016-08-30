@@ -12,7 +12,7 @@ const (
 )
 
 func main() {
-  chain := alice.New(common.TraceHandler, common.RequestTimerHandler).Then(createRouter())
+  chain := alice.New(common.TraceHandler, common.RequestTimerHandler, common.RecoveryHandler).Then(createRouter())
   http.ListenAndServe(":8080", chain)
 }
 
@@ -23,6 +23,7 @@ func createRouter() *vestigo.Router {
 }
 
 func GetHandler(w http.ResponseWriter, r *http.Request)  {
+  panic("AHH")
   w.WriteHeader(http.StatusOK)
   w.Write([]byte("Ok!"))
 }

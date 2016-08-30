@@ -5,6 +5,7 @@ import (
   "time"
   "github.com/nu7hatch/gouuid"
   "log"
+  "github.com/bhavikkumar/level-three-rest/logger"
 )
 
 const(
@@ -14,25 +15,22 @@ const(
   TraceHeader = "X-Request-ID"
 )
 
-// The unique trace id for each incoming request
-var TraceId string
-
 // Trace handler ensures that the trace id is available even
 // if the client did not present one. In the case the client does not present
 // one, then a UUID will be generated. The TraceId is used by the logger
-// packager.
+// package.
 func TraceHandler(next http.Handler) http.Handler  {
   fn := func(w http.ResponseWriter, r *http.Request)  {
-    TraceId = r.Header.Get(TraceHeader)
-    if TraceId == "" {
+    logger.TraceId = r.Header.Get(TraceHeader)
+    if logger.TraceId == "" {
       u, err := uuid.NewV4()
       if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
         return
       }
-      TraceId = u.String()
+      logger.TraceId = u.String()
     }
-    w.Header().Set(TraceHeader, TraceId)
+    w.Header().Set(TraceHeader, logger.TraceId)
     next.ServeHTTP(w, r)
   }
   return http.HandlerFunc(fn)
@@ -48,5 +46,17 @@ func RequestTimerHandler(next http.Handler) http.Handler {
     res := w.(ResponseWriter)
     log.Println("Size:", res.Size(),"Status:",res.Status())
   }
+  return http.HandlerFunc(fn)
+}
+
+func RecoveryHandler(next http.Handler) http.Handler  {
+  fn := func(w http.ResponseWriter, r *http.Request) {
+    defer func() {
+       if err := recover(); err != nil {
+         http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+       }
+     }()
+     next.ServeHTTP(w, r)
+   }
   return http.HandlerFunc(fn)
 }

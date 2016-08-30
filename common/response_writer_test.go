@@ -21,7 +21,7 @@ func TestWriteOnce(t *testing.T) {
 }
 
 
-func TestWriteMultipleTime(t *testing.T) {
+func TestWriteMultiple(t *testing.T) {
 	w := NewResponseWriter(httptest.NewRecorder())
 	b := []byte("ok")
 	c := []byte("Another ok!")
