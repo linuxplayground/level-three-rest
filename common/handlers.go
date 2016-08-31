@@ -49,10 +49,13 @@ func RequestTimerHandler(next http.Handler) http.Handler {
   return http.HandlerFunc(fn)
 }
 
+// Recovers from panics, produces a log and returns a HTTP 500 response back
+// to the client.
 func RecoveryHandler(next http.Handler) http.Handler  {
   fn := func(w http.ResponseWriter, r *http.Request) {
     defer func() {
        if err := recover(); err != nil {
+         log.Printf("Panic: %+v\n", err)
          http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
        }
      }()
